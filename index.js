@@ -5,7 +5,7 @@ var cors = require('cors');
 const app = express();
 const PORT = 3001;
 let  corsOptions = {
-    "origin": "*",
+    "origin": "https://ludokings.vercel.app",
     "methods": "GET,POST",
     "preflightContinue": true,
     "optionsSuccessStatus": 204
