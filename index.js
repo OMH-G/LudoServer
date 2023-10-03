@@ -13,7 +13,7 @@ let  corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.get('/fetchroom',async (req,res)=>{
+app.get('/',async (req,res)=>{
     const data=await supabaseApi.fetchRooms();
     console.log(data)
     res.send({message:data});
