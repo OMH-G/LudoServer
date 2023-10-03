@@ -7,7 +7,7 @@ const PORT = 3001;
 let  corsOptions = {
     "origin": "https://ludokings.vercel.app/",
     "methods": "GET,POST",
-    "preflightContinue": false,
+    "preflightContinue": true,
     "optionsSuccessStatus": 204
   }
 
