@@ -10,7 +10,6 @@ const app = express();
 let allowedOrigins = ['https://ludokings.vercel.app'];
 
 app.use(cors());
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 // const io = socketIo(server, {
@@ -35,7 +34,7 @@ app.post('/fetchusersbyid', async (req, res) => {
   const data = await supabaseApi.fetchUserbyRoomID(roomid);
   res.send({ message: data });
 });
-app.post('/getChips', async (req, res) => {
+app.post('/getChip', async (req, res) => {
   let param=req.body
   const data = await supabaseApi.getChips(param);
   res.send({ message: data['chips'] });
