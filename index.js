@@ -7,7 +7,7 @@ const supabaseApi = require('./supabaseClient');
 const configSupabase = require('./configSupabase');
 
 const app = express();
-let allowedOrigins = ['https://deployludo.vercel.app'];
+let allowedOrigins = ['https://ludogame-wine.vercel.app'];
 
 app.use(cors({
   origin: function(origin, callback){
