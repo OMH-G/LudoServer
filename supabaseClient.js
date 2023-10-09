@@ -108,7 +108,6 @@ module.exports = {
           },
         ])
         .select('id,name,value,owner_name');
-      console.log('history',history)
       return data.data[0];
     } catch (error) {
       console.log('Error in creating room')
@@ -134,7 +133,6 @@ module.exports = {
           },
         ])
         .select();
-      console.log(history)
       return "Room History Saved";
     } catch (error) {
       throw error;
@@ -142,7 +140,6 @@ module.exports = {
   },
   getChips: async function (param) {
     // let userId=param
-    console.log(param)
     try {
       const { data, error } = await configSupabase.supabase
         .from("User")
@@ -150,7 +147,7 @@ module.exports = {
         .eq("user_id", param['userid'])
         .select();
       console.log(data);
-      return data[0];
+      return data;
     } catch (error) {
       console.error("Error creating room in Supabase:");
     }

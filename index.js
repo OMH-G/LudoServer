@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 //   }
 // });
 
-const PORT = 3000;
+const PORT = 3001;
 // let corsOptions = { 
 //   origin : ['https://deployludo.vercel.app'], 
 // } 
@@ -38,8 +38,12 @@ app.post('/getChip', async (req, res) => {
   let param=req.body
   const data = await supabaseApi.getChips(param);
   // console.log(data);
-  console.log(data)
+  if(data.length!==0){
+    res.send({message:0});
+  }
+  else{
   res.send({ message: data['chips'] });
+  }
 });
 
 app.post('/roomUser', async (req, res) => {
