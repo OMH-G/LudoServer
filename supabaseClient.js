@@ -110,7 +110,7 @@ module.exports = {
     userName
   ) {
     try {
-      const data = await supabase
+      const data = await configSupabase.supabase
         .from("RoomHistory")
         .insert([
           {
