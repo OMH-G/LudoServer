@@ -30,6 +30,7 @@ module.exports = {
         .from("User")
         .select("name")
         .eq("roomid", roomid['id']);
+        console.log('fetchUserbyRoomID',data);
       return data;
     } catch (error) {
       console.error("Error fetching room in Supabase");
@@ -146,7 +147,6 @@ module.exports = {
         .select("chips")
         .eq("user_id", param['userid'])
         .select();
-      console.log(data);
       return data;
     } catch (error) {
       console.error("Error creating room in Supabase:");
