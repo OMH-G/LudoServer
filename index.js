@@ -49,6 +49,8 @@ app.post('/fetchusersbyid', cors(corsdata),async (req, res) => {
   res.send({ message: data });
 });
 app.post('/getChips', cors(corsdata),async (req, res) => {
+  res.header('Access-Control-Allow-Origin', 'https://deployludo.vercel.app');
+
   let param=req.body
   const data = await supabaseApi.getChips(param);
   res.send({ message: data['chips'] });
