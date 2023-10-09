@@ -20,7 +20,9 @@ const PORT = 3001;
 //   origin : ['https://deployludo.vercel.app'], 
 // } 
  
-app.use(cors()) 
+app.use(cors({
+  origin: 'https://deployludo.vercel.app', // Replace with your frontend origin
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
