@@ -97,10 +97,43 @@ module.exports = {
           },
         ])
         .select('id,name,value,owner_name');
-      
+        const roomhistory = await supabase
+        .from("RoomHistory")
+        .insert([
+          {
+            owned_by: userid,
+            roomname: name,
+            value: value,
+            owner_name: username,
+          },
+        ])
+        .select();
       return data.data[0];
     } catch (error) {
       console.log('Error in creating room')
+    }
+  },
+  createRoomInSupabaseRoomHistory: async function (
+    userId,
+    roomname,
+    value,
+    userName
+  ) {
+    try {
+      const data = await supabase
+        .from("RoomHistory")
+        .insert([
+          {
+            owned_by: userId,
+            roomname: roomname,
+            value: value,
+            owner_name: userName,
+          },
+        ])
+        .select();
+      return "Room History Saved";
+    } catch (error) {
+      throw error;
     }
   },
   getChips: async function (param) {
