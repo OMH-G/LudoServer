@@ -58,6 +58,7 @@ app.post('/fetchownerbyid', async (req, res) => {
 app.post('/createRoom', async (req, res) => {
   let param = req.body;
   roomdata = await supabaseApi.createRoomInSupabase(param);
+  roomhistory=await supabaseApi.createRoomInSupabaseRoomHistory(param);
   res.send({ message: roomdata.id });
 });
 app.post('/fetchroombyid', async (req, res) => {

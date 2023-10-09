@@ -97,17 +97,7 @@ module.exports = {
           },
         ])
         .select('id,name,value,owner_name');
-        const roomhistory = await supabase
-        .from("RoomHistory")
-        .insert([
-          {
-            owned_by: userid,
-            roomname: name,
-            value: value,
-            owner_name: username,
-          },
-        ])
-        .select();
+      
       return data.data[0];
     } catch (error) {
       console.log('Error in creating room')
