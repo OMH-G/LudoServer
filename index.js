@@ -17,11 +17,12 @@ const server = http.createServer(app);
 
 const PORT = 3001;
 
-const corsOptions = {
-  origin: '*', // Allow connections from any origin (for testing purposes)
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  credentials: true
-};
+let  corsOptions = {
+  "origin": "https://ludokings.vercel.app",
+  "methods": "GET,POST",
+  "preflightContinue": true,
+  "optionsSuccessStatus": 204
+}
 
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
