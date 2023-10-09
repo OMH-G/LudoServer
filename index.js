@@ -17,7 +17,7 @@ const server = http.createServer(app);
 
 const PORT = 3001;
 let corsOptions = { 
-  origin : ['https://ludokings.vercel.app/'], 
+  origin : ['https://ludokings.vercel.app'], 
 } 
  
 app.use(cors(corsOptions)) 
