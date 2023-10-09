@@ -7,7 +7,12 @@ const supabaseApi = require('./supabaseClient');
 const configSupabase = require('./configSupabase');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: 'https://deployludo.vercel.app', // Replace with your frontend's actual origin
+  methods: ['GET', 'POST'], // Specify the HTTP methods you want to allow
+  allowedHeaders: ['Content-Type', 'Authorization'], // Specify the allowed request headers
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const server = http.createServer(app);
