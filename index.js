@@ -7,11 +7,13 @@ const supabaseApi = require('./supabaseClient');
 const configSupabase = require('./configSupabase');
 
 const app = express();
-app.use(cors({
-  origin: 'https://deployludo.vercel.app', // Replace with your frontend's actual origin
-  methods: ['GET', 'POST'], // Specify the HTTP methods you want to allow
-  allowedHeaders: ['Content-Type', 'Authorization'], // Specify the allowed request headers
-}));
+const corsOptions = {
+  origin: 'https://deployludo.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Content-Type', 'pragma'], // Add 'pragma' to the list of allowed headers
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
