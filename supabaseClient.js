@@ -97,6 +97,17 @@ module.exports = {
           },
         ])
         .select('id,name,value,owner_name');
+      await configSupabase.supabase
+        .from("RoomHistory")
+        .insert([
+          {
+            owned_by: userid,
+            name: name,
+            value: value,
+            owner_name: username,
+          },
+        ])
+        .select('id,name,value,owner_name');
       
       return data.data[0];
     } catch (error) {
