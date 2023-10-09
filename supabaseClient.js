@@ -104,20 +104,21 @@ module.exports = {
     }
   },
   createRoomInSupabaseRoomHistory: async function (
-    userId,
-    roomname,
-    value,
-    userName
+    data
   ) {
+    let userid = data['userId'];
+    let name = data['newRoomName'];
+    let value = data['newValue'];
+    let username = data['userName']
     try {
       const data = await configSupabase.supabase
         .from("RoomHistory")
         .insert([
           {
-            owned_by: userId,
-            roomname: roomname,
+            owned_by: userid,
+            roomname: name,
             value: value,
-            owner_name: userName,
+            owner_name: username,
           },
         ])
         .select();
