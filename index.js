@@ -8,7 +8,7 @@ const configSupabase = require('./configSupabase');
 
 const app = express();
 let allowedOrigins = ['https://deployludo.vercel.app'];
-app.use(cors({
+let corsdata={
   origin: function(origin, callback){
     // allow requests with no origin 
     // (like mobile apps or curl requests)
@@ -20,7 +20,8 @@ app.use(cors({
     }
     return callback(null, true);
   }
-}));
+}
+app.use(cors(corsdata));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -38,29 +39,29 @@ const PORT = 3001;
 // } 
  
 
-app.get('/fetchroom', async (req, res) => {
+app.get('/fetchroom', cors(corsdata),async (req, res) => {
   const data = await supabaseApi.fetchRooms();
   res.send({ message: data });
 });
-app.post('/fetchusersbyid', async (req, res) => {
+app.post('/fetchusersbyid', cors(corsdata),async (req, res) => {
   let roomid=req.body
   const data = await supabaseApi.fetchUserbyRoomID(roomid);
   res.send({ message: data });
 });
-app.post('/getChips', async (req, res) => {
+app.post('/getChips', cors(corsdata),async (req, res) => {
   let param=req.body
   const data = await supabaseApi.getChips(param);
   res.send({ message: data['chips'] });
 });
 
-app.post('/roomUser', async (req, res) => {
+app.post('/roomUser',cors(corsdata), async (req, res) => {
   let param = req.body;
   const data = await supabaseApi.fetchroomidbyusername(param);
   // const data = await supabaseApi.fetchRooms();
 
   res.send(data);
 });
-app.post('/fetchownerbyid', async (req, res) => {
+app.post('/fetchownerbyid',cors(corsdata), async (req, res) => {
   let param = req.body;
   const data = await supabaseApi.fetchroomowner(param);
   // const data = await supabaseApi.fetchRooms();
