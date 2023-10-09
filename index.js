@@ -16,9 +16,9 @@ const server = http.createServer(app);
 // });
 
 const PORT = 3001;
-let corsOptions = { 
-  origin : ['https://deployludo.vercel.app'], 
-} 
+// let corsOptions = { 
+//   origin : ['https://deployludo.vercel.app'], 
+// } 
  
 app.use(cors()) 
 app.use(bodyParser.json());
