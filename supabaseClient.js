@@ -106,6 +106,7 @@ module.exports = {
   createRoomInSupabaseRoomHistory: async function (
     data
   ) {
+
     let userid = data['userId'];
     let name = data['newRoomName'];
     let value = data['newValue'];
@@ -116,12 +117,13 @@ module.exports = {
         .insert([
           {
             owned_by: userid,
-            roomname: name,
+            name: name,
             value: value,
             owner_name: username,
           },
         ])
         .select();
+      console.log(history)
       return "Room History Saved";
     } catch (error) {
       throw error;
