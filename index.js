@@ -7,6 +7,9 @@ const supabaseApi = require('./supabaseClient');
 const configSupabase = require('./configSupabase');
 
 const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 const server = http.createServer(app);
 // const io = socketIo(server, {
 //   cors: {
@@ -20,11 +23,6 @@ const PORT = 3001;
 //   origin : ['https://deployludo.vercel.app'], 
 // } 
  
-app.use(cors({
-  origin: 'https://deployludo.vercel.app', // Replace with your frontend origin
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/fetchroom', async (req, res) => {
   const data = await supabaseApi.fetchRooms();
