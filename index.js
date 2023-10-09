@@ -7,7 +7,8 @@ const supabaseApi = require('./supabaseClient');
 const configSupabase = require('./configSupabase');
 
 const app = express();
-let allowedOrigins = ['https://ludokings.vercel.app'];
+let allowedOrigins = ['https://deployludo.vercel.app'];
+
 app.use(cors({
   origin: function(origin, callback){
     // allow requests with no origin 
