@@ -7,8 +7,6 @@ const supabaseApi = require('./supabaseClient');
 const configSupabase = require('./configSupabase');
 
 const app = express();
-let allowedOrigins = ['https://ludokings.vercel.app'];
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -35,8 +33,9 @@ app.post('/fetchusersbyid', async (req, res) => {
   res.send({ message: data });
 });
 app.post('/getChip', async (req, res) => {
+  let auth=req.headers.authorization
   let param=req.body
-  const data = await supabaseApi.getChips(param);
+  const data = await supabaseApi.getChips(param,auth);
   // console.log(data);
   if(data.length!==0){
     res.send({message:0});

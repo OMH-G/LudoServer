@@ -1,11 +1,11 @@
 
-const configSupabase = require('./configSupabase');
-let ConfigSup = require('./configSupabase')
+const supabase = require('./configSupabase');
+let createClient = require("@supabase/supabase-js");
 module.exports = {
 
   fetchRooms: async function () {
     try {
-      let { data, error } = await ConfigSup.supabase.from("Room").select("id,name,owner_name,value");
+      let { data, error } = await configSupabase.supabase.from("Room").select("id,name,owner_name,value");
       return data;
     } catch (error) {
       console.error("Error creating room in Supabase:");
@@ -13,8 +13,9 @@ module.exports = {
   }
   ,
   assignroomid_user: async function (rid_uid_data = null) {
+    
     try {
-      const { data, error } = await ConfigSup.supabase
+      const { data, error } = await configSupabase.supabase
         .from("User")
         .update({ "roomid": rid_uid_data["roomid"] })
         .eq("user_id", rid_uid_data["userid"])
@@ -139,14 +140,21 @@ module.exports = {
       throw error;
     }
   },
-  getChips: async function (param) {
+  getChips: async function (param,auth) {
+    console.log(auth,param,typeof(auth));
     // let userId=param
+    let supabase = createClient.createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+      {
+        global: { headers: { Authorization: auth } },
+      }
+    )
     try {
-      const { data, error } = await configSupabase.supabase
+      const { data, error } = await supabase
         .from("User")
-        .select("chips")
-        .eq("user_id", param['userid'])
-        .select();
+        .select('*')
+        console.log('chiips',data);
       return data;
     } catch (error) {
       console.error("Error creating room in Supabase:");
