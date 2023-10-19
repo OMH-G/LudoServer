@@ -1,11 +1,20 @@
 
-const supabase = require('./configSupabase');
 let createClient = require("@supabase/supabase-js");
+// const sup = require('./configSupabase');
+// const supabase=require
+require('dotenv').config()
+let supabase = createClient.createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  {
+    global: { headers: { Authorization: `Bearer ${process.env.SUP_SECRET_KEY}` } },
+  }
+)
 module.exports = {
 
   fetchRooms: async function () {
     try {
-      let { data, error } = await configSupabase.supabase.from("Room").select("id,name,owner_name,value");
+      let { data, error } = await supabase.from("Room").select("id,name,owner_name,value");
       return data;
     } catch (error) {
       console.error("Error creating room in Supabase:");
@@ -15,7 +24,7 @@ module.exports = {
   assignroomid_user: async function (rid_uid_data = null) {
     
     try {
-      const { data, error } = await configSupabase.supabase
+      const { data, error } = await supabase
         .from("User")
         .update({ "roomid": rid_uid_data["roomid"] })
         .eq("user_id", rid_uid_data["userid"])
@@ -27,11 +36,10 @@ module.exports = {
   },
   fetchUserbyRoomID: async function (roomid) {
     try {
-      const { data, error } = await configSupabase.supabase
+      const { data, error } = await supabase
         .from("User")
         .select("name")
-        .eq("roomid", roomid['id']);
-        console.log('fetchUserbyRoomID',data);
+        .eq("roomid", roomid);
       return data;
     } catch (error) {
       console.error("Error fetching room in Supabase");
@@ -39,7 +47,7 @@ module.exports = {
   },
   deassignroomid_user: async function (userid) {
     try {
-      const { data, error } = await configSupabase.supabase
+      const { data, error } = await supabase
         .from("User")
         .update({ roomid: null })
         .eq("user_id", userid)
@@ -55,7 +63,7 @@ module.exports = {
   },
   fetchroomidbyuserid: async function (userid) {
     try {
-      const { data, error } = await configSupabase.supabase
+      const { data, error } = await supabase
         .from("User")
         .select("roomid")
         .eq("user_id", userid);
@@ -66,7 +74,7 @@ module.exports = {
   },
   fetchroomidbyusername: async function (username) {
     let un=username['username']
-    let data = await configSupabase.supabase
+    let data = await supabase
       .from('Room')
       .select("*")
       .eq('owner_name', un)
@@ -80,7 +88,7 @@ module.exports = {
 
     try {
 
-      let check = await configSupabase.supabase
+      let check = await supabase
         .from("Room")
         .select("owned_by")
         .eq("owned_by", userid);
@@ -88,7 +96,7 @@ module.exports = {
       if (check.data.length !== 0) {
         return {data:[]};
       }
-      const data = await configSupabase.supabase
+      const data = await supabase
         .from("Room")
         .insert([
           {
@@ -99,7 +107,7 @@ module.exports = {
           },
         ])
         .select('id,name,value,owner_name');
-      const history=await configSupabase.supabase
+      const history=await supabase
         .from("RoomHistory")
         .insert([
           {
@@ -124,7 +132,7 @@ module.exports = {
     let value = data['newValue'];
     let username = data['userName']
     try {
-      const data = await configSupabase.supabase
+      const data = await supabase
         .from("RoomHistory")
         .insert([
           {
@@ -140,20 +148,13 @@ module.exports = {
       throw error;
     }
   },
-  getChips: async function (param,auth) {
-    console.log(auth,param,typeof(auth));
+  getChips: async function (userid) {
     // let userId=param
-    let supabase = createClient.createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-      {
-        global: { headers: { Authorization: auth } },
-      }
-    )
     try {
       const { data, error } = await supabase
         .from("User")
-        .select('*')
+        .select('chips')
+        .eq("user_id",userid)
         console.log('chiips',data);
       return data;
     } catch (error) {
@@ -164,22 +165,23 @@ module.exports = {
     let rid=roomid['id']
     try {
 
-      let data= await configSupabase.supabase
+      let data= await supabase
         .from("Room")
-        .select("id,name,value")
+        .select("name,value")
         .eq("id", rid);
       console.log(data);
-      return data.data[0].value;
+      return data.data;
     } catch (error) {
       console.error("error fetching room from Supabase:");
     }
   },
   fetchroomowner: async function (roomid) {
+
     try {
-      const { data, error } = await configSupabase.supabase
+      const { data, error } = await supabase
         .from("Room")
         .select("*")
-        .eq("id", roomid['id']);
+        .eq("id", roomid);
       if(data.length!==0){
 
         return data[0].owner_name;
@@ -187,5 +189,106 @@ module.exports = {
     } catch (error) {
       console.error("Error Fetching room owner name from Supabase");
     }
+  },
+  createUserInSupabase: async function (param) {
+    console.log(param['userId'],param['username'])
+    try {
+  
+      let check = await supabase
+        .from("User")
+        .select("user_id")
+        .eq("user_id", param['userId']);
+      console.log(check);
+      if (check===null || check.data.length !== 0) {
+        return 'user Already created'
+      }
+      const { data, error } = await supabase
+        .from("User")
+        .insert([{ user_id: param['userId'], chips: 100, name: param['username'] }])
+        .select();
+        console.log(data)
+      return "User created";
+    } catch (error) {
+      console.error('Error occured in creating user');
+    }
+  },
+  gamesPlayed: async function (userid) {
+    try {
+      const { data, error } = await supabase
+        .from("RoomHistory")
+        .select()
+        .eq("owned_by", userid);
+      // .count();
+      // The count is returned as data[0].count
+      return data.length;
+    } catch (error) {
+      console.error("Error fetching games played in Supabase");
+      throw error;
+    }
+  },
+  
+  winChips: async function (userid) {
+  try {
+    let data = await supabase
+      .from("User")
+      .select("win_amount")
+      .eq("user_id", userid);
+
+    return data.data[0];
+  } catch (error) {
+    console.error("Error fetching winChips in Supabase");
   }
+},
+loseChips: async function (userid) {
+  try {
+    let data = await supabase
+      .from("User")
+      .select("lose_amount")
+      .eq("user_id", userid);
+
+    return data.data[0];
+  } catch (error) {
+    console.error("Error fetching loseChips in Supabase");
+  }
+},
+
+RoomCode: async function (id,RoomCode,owner,user){
+  console.log(owner,user)
+  try {
+    console.log(id)
+    const check = await supabase
+      .from("Room")
+      .select("*")
+      .eq("id", id)
+    console.log(check)
+    if(check.data[0].roomcode!==null || owner!==user){
+      return check.data[0]
+    }
+    const data = await supabase
+      .from("Room")
+      .update([{ roomcode:RoomCode }])
+      .eq("id", id)
+      .select('*')
+    console.log('Room code is ',data);
+
+    return data.data[0];
+  } catch (error) {
+    console.error("Error getting user id by name in Supabase:");
+    throw error;
+  }
+},
+getUserIdByName: async function (name) {
+  try {
+    const { data, error } = await supabase
+      .from("User")
+      .select("user_id")
+      .eq("name", name)
+    // console.log(data);
+
+    return data[0];
+  } catch (error) {
+    console.error("Error getting user id by name in Supabase:");
+    throw error;
+  }
+}
 };
