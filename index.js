@@ -21,21 +21,21 @@ let suptok=null;
 let clerk_token=null;
 let decoded_ses=null;
 function authenticate(req, res, next) {
-  const cookies = new Cookies(req, res);
-  const sessToken = cookies.get('__session');
-  const token = cookies.get('__clerk_db_jwt');
+  // const cookies = new Cookies(req, res);
+  // const sessToken = cookies.get('__session');
+  // const token = cookies.get('__clerk_db_jwt');
   supToken=req.body['token']
   // supToken=suptok
   // console.log(suptok['token'])
   // supToken=Object.keys(JSON.parse(JSON.stringify(req.body)))[0]
-  if (sessToken === undefined && token === undefined) {
-    res.status(401).json({ error: 'Not signed in' });
-    return;
-  }
+  // if (sessToken === undefined && token === undefined) {
+  //   res.status(401).json({ error: 'Not signed in' });
+  //   return;
+  // }
 
   try {
-    let decoded_tok = jwt.verify(token, process.env.CLERK_PEM);
-    console.log(decoded_tok)
+    // let decoded_tok = jwt.verify(token, process.env.CLERK_PEM);
+    // console.log(decoded_tok)
     decoded_ses = jwt.verify(supToken, process.env.SUPABASE_SECRET_KEY,{algorithms:['HS256']});
       req.sessToken = supToken;
     next(); // Continue with the next middleware or route
