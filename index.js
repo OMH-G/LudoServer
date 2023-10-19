@@ -47,7 +47,7 @@ function authenticate(req, res, next) {
 }
 
 app.use(authenticate);
-app.get('/fetchroom',async (req, res) => {
+app.post('/fetchroom',async (req, res) => {
   // let auth=req.sessToken
 
   const data = await supabaseApi.fetchRooms();
