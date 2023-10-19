@@ -9,9 +9,8 @@ const app = express();
 require('dotenv').config()
 
 app.use(cors({
-  secure:true,
   credentials:true,
-  origin:['http://localhost:3000','https://ludokings.vercel.app','https://kingsludo.com'],
+  origin:['http://localhost:3000','https://ludokings.vercel.app','https://kingsludo.com','http://ludo-server-teal.vercel.app'],
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
