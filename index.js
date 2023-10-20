@@ -12,10 +12,7 @@ require('dotenv').config()
   //   origin:['http:localhost:3000','https://ludokings.vercel.app','https://kingsludo.com'],
   //   credentials:true
   // }));
-  app.use(cors({
-    origin: ['http://localhost:3000'], // Add other origins if needed
-    credentials: true, // If you're using credentials (cookies, authentication)
-  }));
+  app.use(cors());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.options('*', cors());
