@@ -3,7 +3,7 @@ let createClient = require("@supabase/supabase-js");
 // const sup = require('./configSupabase');
 // const supabase=require
 require('dotenv').config()
-let supabase = createClient.createClient(
+const supabase = createClient.createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
   {
