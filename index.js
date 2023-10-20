@@ -12,7 +12,9 @@ require('dotenv').config()
   //   origin:['http:localhost:3000','https://ludokings.vercel.app','https://kingsludo.com'],
   //   credentials:true
   // }));
-  app.use(cors());
+  app.use(cors({
+    credentials:true
+  }));
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
   app.options('*', cors());
@@ -195,7 +197,7 @@ const WebSocket = require('ws');
 
 const server = http.createServer(app,cors());
 
-const wss = new WebSocket.Server({ server });
+const wss = new WebSocket.Server({ server:server});
 
 wss.on('connection', (ws) => {
   console.log('Client connected to WebSocket server');
