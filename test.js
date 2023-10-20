@@ -1,25 +1,31 @@
-const io = require('socket.io-client');
+const WebSocket = require('ws');
 
-// Replace 'http://your-websocket-server-url' with your WebSocket server URL
-const socket = io('ws://localhost:3001');
+// Replace 'ws://localhost:3001' with your WebSocket server URL
+const serverUrl = 'ws://localhost:3001';
 
-socket.on('connect', () => {
-  console.log('Connected to WebSocket server');
+const socket = new WebSocket(serverUrl);
 
-  // Send a message when the connection is open
-  socket.emit('message', 'Hello, server!');
+// Event listener for when the connection is established
+socket.on('open', () => {
+  console.log('Connected to the WebSocket server');
+
+  // Send a message to the server once the connection is open
+  socket.send(JSON.stringify('Hello, server!'));
 });
 
+// Event listener for incoming messages from the server
 socket.on('message', (message) => {
-  console.log('Received message from server:', message);
+  console.log('Received message from the server:', JSON.parse(message));
 
-  // Handle incoming messages from the server
+  // Handle incoming messages here
 });
 
-socket.on('disconnect', (reason) => {
-  console.log('Disconnected from WebSocket server:', reason);
-});
-
+// Event listener for any errors that may occur
 socket.on('error', (error) => {
-  console.error('Socket.IO Error:', error);
+  console.error('WebSocket Error:', error);
+});
+
+// Event listener for when the connection is closed
+socket.on('close', (code, reason) => {
+  console.log(`Connection closed (Code: ${code}, Reason: ${reason})`);
 });

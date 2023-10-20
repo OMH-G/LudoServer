@@ -8,12 +8,17 @@ const jwt = require('jsonwebtoken');
 const app = express();
 require('dotenv').config()
 
-app.use(cors({
-  origin:['http:localhost:3000','https://ludokings.vercel.app','https://kingsludo.com'],
-  credentials:true
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(cors({
+  //   origin:['http:localhost:3000','https://ludokings.vercel.app','https://kingsludo.com'],
+  //   credentials:true
+  // }));
+  app.use(cors({
+    origin: ['http://localhost:3000'], // Add other origins if needed
+    credentials: true, // If you're using credentials (cookies, authentication)
+  }));
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
+  app.options('*', cors());
 const publicKey = process.env.CLERK_PEM_PUBLIC_KEY;
 const PORT = 3001;
 let supToken = null;
@@ -189,30 +194,24 @@ const supabase = createClient.createClient(
     global: { headers: { Authorization: `Bearer ${process.env.SUP_SECRET_KEY}` } },
   }
 )
-const socketIo = require('socket.io'); // Import the socket.io library
+const WebSocket = require('ws');
 
-const server = http.createServer(app);
-const io = socketIo(server, {
-  transports: ['websocket'],
-});
+const server = http.createServer(app,cors());
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
+const wss = new WebSocket.Server({ server });
 
-  // Handle incoming messages from clients
-  socket.on('message', (data) => {
-    console.log('Received message from client:', data);
+wss.on('connection', (ws) => {
+  console.log('Client connected to WebSocket server');
 
-    // Broadcast the message to all connected clients
-    io.emit('message', data);
-  });
+  // Handle WebSocket connections here
+  ws.on('message', (message) => {
+    console.log('Received message from client:',message);
 
-  // Handle disconnections
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
+    // Send a response back to the client
+    ws.send(JSON.stringify('Hello, client!'));
   });
 });
+
 server.listen(PORT, () => {
-
-  console.log(`Server is Successfully Running, and App is listening on port ${PORT}`);
+  console.log(`WebSocket server listening on port ${PORT}`);
 });
