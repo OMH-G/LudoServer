@@ -9,7 +9,7 @@ const app = express();
 require('dotenv').config()
 
 const corsOptions = {
-  origin: ['http://localhost:3001',"https://kingsludo.com"],
+  origin: ['http://localhost:3000',"https://kingsludo.com"],
   credentials: true,
 };
 
