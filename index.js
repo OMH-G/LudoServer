@@ -8,14 +8,16 @@ const jwt = require('jsonwebtoken');
 const app = express();
 require('dotenv').config()
 
-app.use(cors({
-  origin:['http:localhost:3000','https://ludokings.vercel.app','https://kingsludo.com'],
-  credentials:true
-}));
+const corsOptions = {
+  origin: ['http://localhost:3001',"https://kingsludo.com"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const publicKey = process.env.CLERK_PEM_PUBLIC_KEY;
-const PORT = 3001;
+const PORT = 3000;
 let supToken = null;
 let suptok = null;
 let clerk_token = null;
@@ -189,29 +191,10 @@ const supabase = createClient.createClient(
     global: { headers: { Authorization: `Bearer ${process.env.SUP_SECRET_KEY}` } },
   }
 )
-const socketIo = require('socket.io'); // Import the socket.io library
+// const socketIo = require('socket.io'); // Import the socket.io library
 
-const server = http.createServer(app);
-const io = socketIo(server, {
-  transports: ['websocket'],
-});
+const server = http.createServer(app,cors());
 
-io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  // Handle incoming messages from clients
-  socket.on('message', (data) => {
-    console.log('Received message from client:', data);
-
-    // Broadcast the message to all connected clients
-    io.emit('message', data);
-  });
-
-  // Handle disconnections
-  socket.on('disconnect', () => {
-    console.log('A user disconnected');
-  });
-});
 server.listen(PORT, () => {
 
   console.log(`Server is Successfully Running, and App is listening on port ${PORT}`);
