@@ -7,7 +7,7 @@ const Cookies = require('cookies');
 const jwt = require('jsonwebtoken');
 const app = express();
 require('dotenv').config()
-
+let winChips=require('./supabaseClient')
 const corsOptions = {
   origin: ['http://localhost:3000',"https://kingsludo.com"],
   credentials: true,
@@ -17,7 +17,7 @@ app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 const publicKey = process.env.CLERK_PEM_PUBLIC_KEY;
-const PORT = 3000;
+const PORT = 3001;
 let supToken = null;
 let suptok = null;
 let clerk_token = null;
@@ -120,6 +120,7 @@ app.post('/addUserToDB', async (req, res) => {
 });
 
 app.post('/gamesPlayed', async (req, res) => {
+  console.log('games played')
   let userid = decoded_ses['userid']
   console.log(decoded_ses)
   let data = await supabaseApi.gamesPlayed(userid);
@@ -128,8 +129,8 @@ app.post('/gamesPlayed', async (req, res) => {
 });
 app.post('/gameStats', async (req, res) => {
   let userId = decoded_ses['userid']
-  const winAmount = await winChips(userId);
-  const loseAmount = await loseChips(userId);
+  const winAmount = await winChips.winChips(userId);
+  const loseAmount = await winChips.loseChips(userId);
 
   const gameStats = {
     winAmount: winAmount.win_amount,
